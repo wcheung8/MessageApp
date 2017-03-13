@@ -19,12 +19,14 @@
 	
 
 		<form class="myform" action="index.php" method="post">
-			<label><b>Username:</b></label><br>
+			<label><b>Your Username:</b></label><br>
 			<input type="text" class="inputvalues" placeholder="Input your username"/><br><br>
-			<label><b>Password:</b></label><br>
-			<input type="password" class="inputvalues" placeholder="Input your password"/><br><br>
-			<input type="submit" id="login_btn" value="Login"/><br>
-			<input type="button" id="register_btn" value="Register"/>
+			<label><b>Your Password:</b></label><br>
+			<input type="text" class="inputvalues" placeholder="Input your password"/><br>
+			<label><b>Confirm Password:</b></label><br>
+			<input type="text" class="inputvalues" placeholder="Input your password"/><br>
+			<input type="submit" id="signup_btn" value="Signup"/><br>
+			<input type="button" id="back_btn" value="Back"/>
 		</form>
 	</div>
 
