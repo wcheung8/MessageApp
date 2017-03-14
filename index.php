@@ -1,6 +1,7 @@
 <?php
 	
-	// require('app/core.inc.php');
+	session_start();
+	require('app/core.inc.php');
 
 ?>
 
@@ -20,12 +21,31 @@
 
 		<form class="myform" action="index.php" method="post">
 			<label><b>Username:</b></label><br>
-			<input type="text" class="inputvalues" placeholder="Input your username"/><br><br>
+			<input name="username" type="text" class="inputvalues" placeholder="Input your username" required="" /><br><br>
 			<label><b>Password:</b></label><br>
-			<input type="password" class="inputvalues" placeholder="Input your password"/><br><br>
-			<input type="submit" id="login_btn" value="Login"/><br>
-			<input type="button" id="register_btn" value="Register"/>
+			<input name="password" type="password" class="inputvalues" placeholder="Input your password" required="" /><br><br>
+			<input name="login" type="submit" id="login_btn" value="Login"/><br>
+			<a href="register.php"><input type="button" id="register_btn" value="Register"/></a>
 		</form>
+
+		<?php
+			if (isset($_POST['login'])) {
+				$username = $_POST['username'];
+				$password = $_POST['password'];
+
+				$query = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
+				$query_run = mysqli_query($connection, $query);
+
+				if (mysqli_num_rows($query_run) > 0) {
+					$_SESSION['username'] = $username;
+					header("location:homepage.php");
+				} else {
+					echo '<script type="text/javascript"> alert("Invalid account!!") </script>';
+				}
+
+			}
+		?>
+
 	</div>
 
 </body>
