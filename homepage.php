@@ -5,6 +5,9 @@
 
 ?>
 
+<script src="./update.js"></script>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,12 +22,12 @@
 					echo $_SESSION['username'];
 				?>
 			</h2>
-			<img src="image/home.png" class="avatar" />
-		</center>
-	
-
-		<form class="myform" action="homepage.php" method="post">
-			<center>
+            
+            <div id="chatBox"></div>
+            
+            <form id="msgForm" action="message.php" method="post" onsubmit="return sendMsg(this);">
+                <input type="text" name="msg" id="msg" placeholder="Enter message here"/>
+            </form>
 				<input name="logout" type="submit" id="logout_btn" value="Logout"/><br>
 			</center>
 		</form>

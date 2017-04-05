@@ -4,10 +4,11 @@
     
     header('Content-Type: text/event-stream');
     header('Cache-Control: no-cache');
-    if(!isset($_SESSION['username']))
-        die()
-
-    for($i = 0; $i < 60; $i+){ 
+    if(!isset($_SESSION['username'])){
+        die();
+    }
+    
+    for($i = 0; $i < 60; $i++){ 
 
         // check for any modification to users
         if(filemtime('./users.json')  > $_SESSION['last_update']) {
@@ -17,13 +18,13 @@
             $users = json_decode($file, true);
             
             // check for user notification
-            if ($users[$_SESSION['username'] == true){
+            if ($users[$_SESSION['username']] == true){
                
                 // query database and push new messages
-                
+                #TODO
                 
                 // update user status
-                $users[$_SESSION['username'] = false;
+                $users[$_SESSION['username']] = false;
                 file_put_contents("./users.json", json_encode($users));
 
             }

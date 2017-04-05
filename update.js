@@ -1,34 +1,64 @@
-var evtSource = new EventSource("update.php");
+var evtSource = new EventSource("test.php");
 
-evtSource.onmessage = function(e) {
+evtSource.onmessage = function(event) {
 }
 
-evtSource.onerror = function(e) {
-    alert("EventSource failed.");
-};
-
-evtSource.addEventListener("update", function(e) {
- var newElement = document.createElement("li");       
- var obj = JSON.parse(e.data);
- newElement.innerHTML = obj.newMessage;
- $('#chat_panel').append(newElement);
+evtSource.addEventListener("update", function(event) {
+    var newElement = document.createElement("li");       
+    var obj = JSON.parse(event.data);
+    newElement.innerHTML = obj.newMessage;
+    $('#chatBox').append(newElement);
 }, false);
 
-$('#message_form').submit(function(e){
-    e.preventDefault();
-    var message = $('#chat_box').val();
+current_user = ""
 
-    $.ajax({
-        type: 'POST',
-        dataType: 'json',
-        data: message,
-        url: 'send_message.php',
-        beforeSend: function(){
+// Send message to the server using AJAX call
+function sendMsg(form) {
 
-        },
-        success: function(){
-            $('#chat_box').val("");
-        }
-    });
-    return false;
-});
+	if (form.msg.value.trim() == "") {
+		alert("Empty message!");
+	}
+
+	// Init http object
+	var http = false;
+	if (typeof ActiveXObject != "undefined") {
+		try {
+			http = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (ex) {
+			try {
+				http = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (ex2) {
+				http = false;
+			}
+		}
+	} else if (window.XMLHttpRequest) {
+		try {
+			http = new XMLHttpRequest();
+		} catch (ex) {
+			http = false;
+		}
+	}
+
+	if (!http) {
+		alert("Unable to connect!");
+		return;
+	}
+
+	// Prepare data
+	var parameters = "msg=" + encodeURIComponent(form.msg.value.trim()) + "&to_user=" + encodeURIComponent(current_user);
+
+	http.onreadystatechange = function () {
+		if (http.readyState == 4 && http.status == 200) {
+			if (typeof http.responseText != "undefined") {
+				var result = http.responseText;
+				form.msg.value = "";
+			}
+		}
+	};
+
+	http.open("POST", form.action, true);
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.send(parameters);
+
+	return false;
+}
