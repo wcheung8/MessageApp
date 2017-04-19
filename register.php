@@ -1,6 +1,5 @@
 <?php
 	require('app/core.inc.php');
-
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +13,6 @@
 		<center>
 			<h2>Sign Up</h2>
 		</center>
-	
 
 		<form class="myform" action="register.php" method="post">
 			<label><b>Your Username:</b></label><br>
@@ -31,26 +29,20 @@
 		</form>
 		<?php
 			if(isset($_POST['submit_btn'])) {
-				// echo '<script type="text/javascript"> alert("Sign Up button clicked") </script>';
 				$username = $_POST['username'];
 				$password = $_POST['password'];
 				$cpassword = $_POST['cpassword'];
 
 				if ($password == $cpassword) {
-					$query = "SELECT * from user WHERE username = '$username'";
-					$query_run = mysqli_query($connection, $query);
+					$query = "SELECT * FROM user WHERE username = '".$username."';";
+                    $result = $db->query($query);
 
-					if (mysqli_num_rows($query_run) > 0) {
+                    if ($result->fetchArray(SQLITE3_ASSOC)){
 						echo '<script type="text/javascript"> alert("This username is already exist!") </script>';
 					} else {
-						$query = "INSERT into user value('$username', '$password')";
-						$query_run = mysqli_query($connection, $query);
-
-						if ($query_run) {
-							echo '<script type="text/javascript"> alert("Congratulation...User Registered!") </script>';
-						} else {
-							echo '<script type="text/javascript"> alert("Error!") </script>';
-						}
+						$query = "INSERT into User values('".$username."', '".$password."')";
+						$db->exec($query);
+                        echo '<script type="text/javascript"> alert("Congratulation...User Registered!") </script>';
 					}
 				} else {
 					echo '<script type="text/javascript"> alert("Password does not match!!") </script>';

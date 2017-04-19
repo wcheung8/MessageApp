@@ -1,19 +1,22 @@
-var evtSource = new EventSource("test.php");
+if (!!window.EventSource) {
+	// Subscribe to url to listen
+	var source = new EventSource('./update.php');
 
-evtSource.onmessage = function(event) {
-}
+	// Define what to do when server sent new event
+	source.addEventListener("update", function(event) {
+		var el = document.getElementById("chatbox"); 
+        var obj = JSON.parse(event.data);
+		el.innerHTML += '<' + obj.timestamp + '> ' + obj.user + ': ' + obj.msg + "<br/>";
+		el.scrollTop += 50;
+	}, false);
+} else {
+	alert("Your browser does not support EventSource!");
+} 
 
-evtSource.addEventListener("update", function(event) {
-    var newElement = document.createElement("li");       
-    var obj = JSON.parse(event.data);
-    newElement.innerHTML = obj.newMessage;
-    $('#chatBox').append(newElement);
-}, false);
 
-current_user = ""
 
 // Send message to the server using AJAX call
-function sendMsg(form) {
+function sendMsg(form, user, current_user, timestamp) {
 
 	if (form.msg.value.trim() == "") {
 		alert("Empty message!");
@@ -43,10 +46,8 @@ function sendMsg(form) {
 		alert("Unable to connect!");
 		return;
 	}
-
 	// Prepare data
-	var parameters = "msg=" + encodeURIComponent(form.msg.value.trim()) + "&to_user=" + encodeURIComponent(current_user);
-
+	var parameters = "msg=" + encodeURIComponent(form.msg.value.trim()) + "&to=" + encodeURIComponent(user);
 	http.onreadystatechange = function () {
 		if (http.readyState == 4 && http.status == 200) {
 			if (typeof http.responseText != "undefined") {
@@ -59,6 +60,11 @@ function sendMsg(form) {
 	http.open("POST", form.action, true);
 	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	http.send(parameters);
+    
+    var el = document.getElementById("chatbox");
+    el.innerHTML += '<' + timestamp + '> ' + current_user + ': ' + msg.value.trim() + "<br/>";
+    el.scrollTop += 50;
 
 	return false;
 }
+

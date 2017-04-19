@@ -1,11 +1,12 @@
 <?php
 	
 	session_start();
-	// require('app/core.inc.php');
+	require('app/core.inc.php');
+    if(!isset($_SESSION['username'])){
+        die();
+    } 
 
 ?>
-
-<script src="./update.js"></script>
 
 
 <!DOCTYPE html>
@@ -23,15 +24,26 @@
 				?>
 			</h2>
             
-            <div id="chatBox"></div>
-            
-            <form id="msgForm" action="message.php" method="post" onsubmit="return sendMsg(this);">
-                <input type="text" name="msg" id="msg" placeholder="Enter message here"/>
+            <form id="form" action="view.php" method="get;">
+                    <label for="user">Select conversation</label>
+                    <select id="user" name="user" onchange="document.getElementById('form').submit()";>
+                        <option value="">--</option>
+                        <?php
+                            // query database and push new messages
+                            $query = "SELECT username
+                                      FROM User
+                                      WHERE username <> '".$_SESSION['username']."';";
+                            $result = $db->query($query);
+                            while($res = $result->fetchArray(SQLITE3_ASSOC)){
+                                echo '<option value="' . $res['username']. '">' . $res['username'] . '</option>';
+                            }
+                        ?>
+                    </select>
             </form>
-				<input name="logout" type="submit" id="logout_btn" value="Logout"/><br>
-			</center>
-		</form>
-
+            <form action="homepage.php" method="post" >
+            <input name="logout" type="submit" id="logout_btn" value="Logout"/><br>
+            </form>
+        </center>
 		<?php
 			if (isset($_POST['logout'])) {
 				session_destroy();

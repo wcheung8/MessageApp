@@ -33,14 +33,14 @@
 				$username = $_POST['username'];
 				$password = $_POST['password'];
 
-				$query = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
-				$query_run = mysqli_query($connection, $query);
-
-				if (mysqli_num_rows($query_run) > 0) {
-					$_SESSION['username'] = $username;
+				$query = "SELECT * FROM user WHERE username = '".$username."' AND password = '".$password."';";
+				$result = $db->query($query);
+                
+                if($result->fetchArray(SQLITE3_ASSOC)) {
+                    $_SESSION['username'] = $username;
 					header("location:homepage.php");
-				} else {
-					echo '<script type="text/javascript"> alert("Invalid account!!") </script>';
+                }  else {
+					echo '<script type="text/javascript"> alert("Invalid account!") </script>';
 				}
 
 			}
