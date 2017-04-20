@@ -26,6 +26,7 @@
                 FOREIGN KEY (to_user) REFERENCES USER(username),
                 FOREIGN KEY (from_user) REFERENCES USER(username)
                 );");
-	
+    $db->exec("CREATE VIRTUAL TABLE IF NOT EXISTS MessageSearch USING FTS5(timestamp, from_user, message);");
+
 
 ?>

@@ -7,7 +7,9 @@
     } 
     
     $_SESSION['last_update'] = time();
-    $_SESSION['current'] = $_GET['user']
+    if(!isset($_GET['user'])){
+        $_SESSION['current'] = $_GET['user'];
+    }
 ?>
 
 <script src="./update.js"></script>
@@ -16,7 +18,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Home Page</title>
+	<title>Chat</title>
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body style="background-color: #7f8c8d">
@@ -24,7 +26,7 @@
 		<center>
 			<h2>Conversation with  
 				<?php
-					echo $_GET['user'];
+					echo $_SESSION['current'];
 				?>
 			</h2>
             
@@ -69,6 +71,8 @@
             <form action="homepage.php" method="post" >
             <input name="logout" type="submit" id="logout_btn" value="Logout"/><br>
             </form>
+            <a href="./search.php">Search</a>
+            
         </center>
 		<?php
 			if (isset($_POST['logout'])) {
