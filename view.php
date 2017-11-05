@@ -7,8 +7,10 @@
     } 
     
     $_SESSION['last_update'] = time();
-    if(!isset($_GET['user'])){
+    if(isset($_GET['user'])){
         $_SESSION['current'] = $_GET['user'];
+    } else {
+        die("no user selected");
     }
 ?>
 
